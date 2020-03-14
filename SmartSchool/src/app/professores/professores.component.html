@@ -1,5 +1,11 @@
+<div *ngIf="professorSelecionado">
+  <app-titulo [titulo]="'Professor: ' + professorSelecionado"></app-titulo>
+  <br>
+  <button class="btn btn-default" (click)="voltar()">Voltar</button>
+</div>
+<div *ngIf="!professorSelecionado">
 <app-titulo [titulo]="titulo"></app-titulo>
-<table class="table table-striped">
+<table class="table table-striped table-hover">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -8,10 +14,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let prof of professores">
+      <tr *ngFor="let prof of professores" style="cursor: pointer;" (click)="professorSelect(prof)">
         <th scope="row">{{prof.id}}</th>
         <td>{{prof.nome}}</td>
         <td>{{prof.disciplina}}</td>
       </tr>
     </tbody>
   </table>
+</div>
