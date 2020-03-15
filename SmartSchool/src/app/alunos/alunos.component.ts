@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+import { Aluno } from '../models/aluno';
 
 @Component({
   selector: 'app-alunos',
@@ -7,8 +11,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AlunosComponent implements OnInit {
 
-  public alunoSelecionado: string;
+  public modalRef: BsModalRef;
+  public alunoForm: FormGroup;
+  public alunoSelecionado: Aluno;
   public titulo = 'Alunos'
+  public textSimple: string;
+
   alunos = [
     { id: 1, nome: 'Marta' , sobrenome: 'Das Virgens', telefone: 332255 },
     { id: 2, nome: 'Paula' , sobrenome: 'De castro', telefone: 43434 },
@@ -19,16 +27,35 @@ export class AlunosComponent implements OnInit {
     { id: 7, nome: 'Paulo' , sobrenome: 'Silva', telefone: 11111 },
   ];
 
-  alunoSelect(aluno: any) {
-    this.alunoSelecionado = aluno.nome;    
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 
-  voltar() {
-    this.alunoSelecionado = '';
+  constructor(private fb: FormBuilder, private modalService: BsModalService) { 
+    this.criarForm();
   }
-  constructor() { }
 
   ngOnInit() {
   }
 
+  criarForm() {
+    this.alunoForm = this.fb.group({
+      nome: ['', Validators.required],
+      sobrenome: ['', Validators.required],
+      telefone: ['', Validators.required],
+    });
+  }
+
+  alunoSubmit() {
+    console.log(this.alunoForm.value);
+  }
+
+  alunoSelect(aluno: Aluno) {
+    this.alunoSelecionado = aluno;
+    this.alunoForm.patchValue(aluno); // manda para view os dados 
+  }
+
+  voltar() {
+    this.alunoSelecionado = null;
+  }
 }
